@@ -1,0 +1,85 @@
+<!-- agent.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent</title>
+</head>
+<body>
+    <h2>Available Doctors</h2>
+    <ul id="doctorList"></ul>
+
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <script src="https://cdn.jsdelivr.net/npm/@babel/polyfill"></script>
+    <script>
+        const socket = new WebSocket("ws://localhost:5000"); // Replace with your server address
+        const peerConnection = new RTCPeerConnection({
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        });
+        
+        let localStream;
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+            document.getElementById("localVideo").srcObject = stream;
+            localStream = stream;
+        });
+
+        socket.onopen = () => {
+            socket.send(JSON.stringify({ type: "register", role: "agent", id: "agent1" }));
+        };
+
+        socket.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === "incomingCall") {
+                alert(`Incoming call from ${data.from}`);
+                // Show the answer button (Not implemented here)
+            } else if (data.type === "offer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                socket.send(JSON.stringify({ type: "answer", answer, to: data.from }));
+            } else if (data.type === "answer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+            } else if (data.type === "icecandidate") {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+        };
+
+        async function startCall(doctorId) {
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.send(JSON.stringify({ type: "call", agentId: "agent1", doctorId }));
+            socket.send(JSON.stringify({ type: "offer", offer, to: doctorId }));
+        }
+
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
+        };
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                socket.send(JSON.stringify({ type: "icecandidate", candidate: event.candidate, to: "doctor1" }));
+            }
+        };
+
+        localStream.getTracks().forEach((track) => peerConnection.addTrack(track, localStream));
+
+        // Generate list of doctors for agent to call
+        function generateDoctorList() {
+            const doctors = ["doctor1", "doctor2", "doctor3"];
+            const doctorList = document.getElementById("doctorList");
+
+            doctors.forEach((doctor) => {
+                const li = document.createElement("li");
+                li.innerHTML = `<button onclick="startCall('${doctor}')">Call ${doctor}</button>`;
+                doctorList.appendChild(li);
+            });
+        }
+
+        generateDoctorList();
+    </script>
+</body>
+</html>

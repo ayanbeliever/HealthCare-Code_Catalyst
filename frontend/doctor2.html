@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        /* Update these CSS rules in the existing style section */
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+    padding: 0 10px;  /* Added padding */
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;  /* Reduced font size */
+    word-break: break-word;  /* Added word break */
+}
+
+.contact-item span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;  /* Added text overflow handling */
+}
+
+/* Make the items stack vertically on smaller screens */
+@media (max-width: 1024px) {
+    .contact-info {
+        grid-template-columns: 1fr;  /* Single column on smaller screens */
+    }
+}
+
+/* Update the profile card styles */
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 100%;  /* Ensure card doesn't overflow */
+    overflow: hidden;  /* Prevent content overflow */
+}
+
+/* Adjust the icons */
+.contact-item i {
+    color: var(--secondary-color);
+    flex-shrink: 0;  /* Prevent icon from shrinking */
+    width: 20px;  /* Fixed width for icons */
+    text-align: center;
+}
+
+        /* Header Styles */
+        .header {
+            background: var(--primary-color);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .profile-specialty {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        /* Details Section */
+        .details-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .detail-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .education-item, .experience-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .education-item:last-child, .experience-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .item-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-item i {
+            color: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-user-md"></i>
+            Doctor Dashboard
+        </div>
+        <nav class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-calendar"></i> Appointments</a>
+            <a href="#"><i class="fas fa-users"></i> Patients</a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="profile-grid">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-image">
+                    <img src="https://via.placeholder.com/200" alt="Doctor's Profile Picture">
+                </div>
+                <div class="profile-name">Dr. John Smith</div>
+                <div class="profile-specialty">Cardiologist</div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-value">15+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1000+</div>
+                        <div class="stat-label">Patients</div>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>john.smith@email.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 234 567 8900</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>New York, USA</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-hospital"></i>
+                        <span>Central Hospital</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="details-section">
+                <!-- About -->
+                <div class="detail-card">
+                    <h2>About Me</h2>
+                    <p>Experienced cardiologist with over 15 years of practice in diagnosing and treating cardiovascular conditions. Specialized in interventional cardiology and preventive cardiac care. Committed to providing comprehensive patient care and staying updated with the latest medical advancements.</p>
+                </div>
+
+                <!-- Education -->
+                <div class="detail-card">
+                    <h2>Education</h2>
+                    <div class="education-item">
+                        <div class="item-title">MD in Cardiology</div>
+                        <div class="item-subtitle">Harvard Medical School | 2005-2009</div>
+                    </div>
+                    <div class="education-item">
+                        <div class="item-title">MBBS</div>
+                        <div class="item-subtitle">Johns Hopkins University | 2000-2005</div>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="detail-card">
+                    <h2>Experience</h2>
+                    <div class="experience-item">
+                        <div class="item-title">Senior Cardiologist</div>
+                        <div class="item-subtitle">Central Hospital | 2015-Present</div>
+                    </div>
+                    <div class="experience-item">
+                        <div class="item-title">Cardiologist</div>
+                        <div class="item-subtitle">City Medical Center | 2009-2015</div>
+                    </div>
+                </div>
+
+                <!-- Specializations -->
+                <div class="detail-card">
+                    <h2>Specializations</h2>
+                    <div class="experience-item">
+                        <div class="item-title">Interventional Cardiology</div>
+                        <div class="item-subtitle">Specialized in cardiac catheterization and angioplasty</div>
+                    </div>
+                    <div class="experience-item">
+                        <div class="item-title">Preventive Cardiology</div>
+                        <div class="item-subtitle">Focus on risk assessment and prevention of heart disease</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

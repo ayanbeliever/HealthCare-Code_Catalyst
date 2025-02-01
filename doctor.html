@@ -1,0 +1,199 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Dashboard</title>
+</head>
+<body>
+
+    <form class="login-form">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login</button>
+    </form>
+
+    <h1>Doctor Dashboard</h1>
+    <button id="startCall">Start Video Call</button>
+
+    <script>
+        document.querySelector('.login-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:5000/api/doctor/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                document.querySelector('.login-form').style.display = 'none';
+            } else {
+                alert('Login failed. Please try again.');
+            }
+        });
+        document.getElementById("startCall").addEventListener("click", function() {
+            window.location.href = "video.html?roomId=room-123";
+        });
+    </script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #localVideo, #remoteVideo {
+      width: 45%;
+      height: 300px;
+      background: #000;
+      margin: 5px;
+    }
+    #videos {
+      display: flex;
+      justify-content: center;
+    }
+    #incomingCall {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #333;
+      background: #f9f9f9;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Doctor Dashboard</h1>
+  <div id="incomingCall">
+    <p>Incoming call from Agent <span id="callerName"></span></p>
+    <button id="acceptCall">Accept</button>
+    <button id="rejectCall">Reject</button>
+  </div>
+  <div id="videos" style="display: none;">
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+  </div>
+
+  <!-- Socket.io -->
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script>
+    // --- Configuration ---
+    const signalingServerURL = "http://localhost:5000";
+    const doctorID = "doctor-001";  // Use authenticated doctor ID
+
+    // --- Initialize Socket.io ---
+    const socket = io(signalingServerURL, { withCredentials: true });
+    socket.emit('register', { userID: doctorID, role: "doctor" });
+
+    // Variables for WebRTC
+    let localStream;
+    let peerConnection;
+    const config = {
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" }
+      ]
+    };
+
+    // Function to get local stream
+    async function getLocalStream() {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById("localVideo").srcObject = localStream;
+      } catch (err) {
+        console.error("Error accessing media devices.", err);
+      }
+    }
+
+    // Create PeerConnection
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection(config);
+
+      // Add local stream tracks
+      localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+      });
+
+      // When remote stream arrives
+      peerConnection.ontrack = (event) => {
+        const [remoteStream] = event.streams;
+        document.getElementById("remoteVideo").srcObject = remoteStream;
+      };
+
+      // ICE candidate event
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('signal', {
+            to: incomingCallData.agentID,  // send to agent
+            from: doctorID,
+            type: 'ice-candidate',
+            payload: event.candidate
+          });
+        }
+      };
+
+      return peerConnection;
+    }
+
+    // Variable to store incoming call data
+    let incomingCallData = null;
+
+    // Listen for incoming call notifications
+    socket.on('incoming-call', (data) => {
+      // data = { agentID, roomID }
+      incomingCallData = data;
+      document.getElementById("callerName").innerText = data.agentID;
+      document.getElementById("incomingCall").style.display = "block";
+    });
+
+    // Accept call button
+    document.getElementById("acceptCall").addEventListener("click", async () => {
+      document.getElementById("incomingCall").style.display = "none";
+      document.getElementById("videos").style.display = "flex";
+
+      await getLocalStream();
+      createPeerConnection();
+
+      // Set up answer after receiving an offer
+      socket.on('signal', async (data) => {
+        // Expecting an offer from the agent
+        if (data.type === 'offer' && data.from === incomingCallData.agentID) {
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
+          // Create answer
+          const answer = await peerConnection.createAnswer();
+          await peerConnection.setLocalDescription(answer);
+          // Send answer back to the agent
+          socket.emit('signal', {
+            to: incomingCallData.agentID,
+            from: doctorID,
+            type: 'answer',
+            payload: answer
+          });
+        } else if (data.type === 'ice-candidate' && data.from === incomingCallData.agentID) {
+          try {
+            await peerConnection.addIceCandidate(data.payload);
+          } catch (err) {
+            console.error("Error adding ICE candidate", err);
+          }
+        }
+      });
+    });
+
+    // Reject call button
+    document.getElementById("rejectCall").addEventListener("click", () => {
+      document.getElementById("incomingCall").style.display = "none";
+      incomingCallData = null;
+      // Optionally, send a message to agent to cancel the call
+    });
+  </script>
+</body>
+</html>

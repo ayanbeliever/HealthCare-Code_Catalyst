@@ -1,0 +1,104 @@
+<!-- doctor.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor</title>
+    <style>
+        #incomingCall {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f0f0f0;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <h2>Waiting for call...</h2>
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <!-- Incoming Call Notification Modal -->
+    <div id="incomingCall">
+        <p id="incomingCallMessage"></p>
+        <button id="acceptCall">Accept</button>
+        <button id="declineCall">Decline</button>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@babel/polyfill"></script>
+    <script>
+        const socket = new WebSocket("ws://localhost:5000"); // Replace with your server address
+        const peerConnection = new RTCPeerConnection({
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        });
+
+        let localStream;
+
+        // Get the user's media (video and audio)
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+            document.getElementById("localVideo").srcObject = stream;
+            localStream = stream;
+        });
+
+        socket.onopen = () => {
+            socket.send(JSON.stringify({ type: "register", role: "doctor", id: "doctor1" }));
+        };
+
+        socket.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+
+            // Incoming call from the agent
+            if (data.type === "incomingCall") {
+                document.getElementById("incomingCall").style.display = "block";  // Show the modal
+                document.getElementById("incomingCallMessage").innerText = `Incoming call from Agent ${data.from}`;
+
+                // Handle answer or decline actions
+                document.getElementById("acceptCall").onclick = async () => {
+                    document.getElementById("incomingCall").style.display = "none"; // Hide the modal
+                    // Create offer and send it back to the agent
+                    const offer = await peerConnection.createOffer();
+                    await peerConnection.setLocalDescription(offer);
+                    socket.send(JSON.stringify({ type: "offer", offer, to: data.from }));
+                };
+
+                document.getElementById("declineCall").onclick = () => {
+                    document.getElementById("incomingCall").style.display = "none"; // Hide the modal
+                    // Optionally send a message to the agent to indicate the call was declined
+                };
+            }
+            // Handle other messages like offer, answer, and ice candidates (similar to the previous code)
+            else if (data.type === "offer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                socket.send(JSON.stringify({ type: "answer", answer, to: data.from }));
+            } else if (data.type === "answer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+            } else if (data.type === "icecandidate") {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+        };
+
+        // Handle the video track and ice candidates
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
+        };
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                socket.send(JSON.stringify({ type: "icecandidate", candidate: event.candidate, to: "agent1" }));
+            }
+        };
+
+        localStream.getTracks().forEach((track) => peerConnection.addTrack(track, localStream));
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Call</title>
+  <style>
+    /* Simple CSS to take full viewport */
+    #root {
+      width: 100vw;
+      height: 100vh;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Video Call Room</h1>
+  <div id="root"></div>
+  <button onclick="leaveRoom()">End Call</button>
+
+  <!-- Include the ZegoCloud SDK -->
+  <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+  <script>
+    // Utility: Parse query parameters from URL
+    function getUrlParams(url) {
+      const queryString = url.split('?')[1] || '';
+      return Object.fromEntries(new URLSearchParams(queryString));
+    }
+
+    // Global variable to hold our Zego instance
+    let zg;
+
+    // Function to leave the call
+    function leaveRoom() {
+      if (zg && window.roomID) {
+        zg.logoutRoom(window.roomID);
+        alert("Call Ended!");
+      }
+    }
+
+    // When the page loads, fetch the token and initialize the call
+    window.onload = async function() {
+      // Get parameters from URL or assign default values
+      const params = getUrlParams(window.location.href);
+      // If the parameters are not provided, generate defaults (for testing)
+      const roomID = params.roomID || ("room-" + Date.now());
+      const userID = params.userID || ("user-" + Math.floor(Math.random() * 10000));
+      const userName = params.userName || ("User " + userID);
+
+      // Store the roomID globally for later use
+      window.roomID = roomID;
+
+      // Fetch token from the backend API
+      // Replace localhost:5000 with your backend domain if needed.
+      const tokenResponse = await fetch(`http://localhost:5000/api/video/generate-token?roomID=${roomID}&userID=${userID}&userName=${encodeURIComponent(userName)}`, {
+        method: 'GET',
+        credentials: 'include', // include cookies if required
+      });
+
+      const data = await tokenResponse.json();
+
+      // Ensure we have a valid token and appId
+      if (!data.token || !data.appId) {
+        alert("Failed to fetch video token.");
+        return;
+      }
+
+      // Initialize ZegoUIKit with the fetched token
+      const kitToken = data.token;
+      zg = ZegoUIKitPrebuilt.create(kitToken);
+
+      // Join the video room
+      zg.joinRoom({
+        container: document.querySelector("#root"),
+        sharedLinks: [{
+          name: 'Personal link',
+          url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID,
+        }],
+        scenario: {
+          mode: ZegoUIKitPrebuilt.VideoConference,
+        },
+        turnOnMicrophoneWhenJoining: true,
+        turnOnCameraWhenJoining: true,
+        showMyCameraToggleButton: true,
+        showMyMicrophoneToggleButton: true,
+        showAudioVideoSettingsButton: true,
+        showScreenSharingButton: true,
+        showTextChat: true,
+        showUserList: true,
+        maxUsers: 2,
+        layout: "Auto",
+        showLayoutButton: false,
+      });
+    }
+  </script>
+</body>
+</html>

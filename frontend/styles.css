@@ -1,0 +1,733 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header Styles */
+  .header {
+    background: #01161e; /* Dark greenish-blue */
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #eff6e0; /* Light pastel green */
+  }
+  .header .title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .header .title i {
+    font-size: 1.6rem;
+    color: #598392; /* Sky blue */
+  }
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: #eff6e0;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .nav-links a:hover {
+    background: #124559; /* Darker blue */
+  }
+  
+  /* Hero Section */
+  .hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #eff6e0;
+    text-align: center;
+  }
+  /* Hero Section Styles */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #eff6e0;
+    overflow: hidden;
+  }
+  
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit:contain;
+    z-index: -1;
+  }
+  
+  .hero-content {
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+    z-index: 1;
+  }
+  
+  .hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+  }
+  
+  .hero-content p {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    color: #fff;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+    
+    .button-group {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  /* .hero {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  } */
+  
+  
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0 5%;
+  }
+  
+  .hero-container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    max-width: 1200px;
+    width: 100%;
+  }
+  
+  .hero-image {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .hero-content {
+    width: 50%;
+    text-align: right;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  .hero-content {
+    z-index: 2;
+    max-width: 700px;
+  }
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color:#124559; /* Sky Blue */
+  }
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color:rgb(41, 50, 42); /* Pastel green */
+  }
+  .btn {
+    background: #124559; /* Dark blue */
+    color: #eff6e0;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover {
+    background: #598392; /* Sky blue on hover */
+  }
+  .btn8{
+    text-decoration: none;
+  }
+  /* Photo Section Styles */
+  .photo-section {
+    padding: 4rem 2rem;
+    background-color: #f5f5f5;
+  }
+  /* Photo Section Styles */
+  .photo-section {
+    padding: 4rem 2rem;
+    background-color: #f5f5f5;
+  }
+  
+  .photo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .photo-box {
+    flex: 0 1 400px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .photo-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .section-photo {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  .photo-box h3 {
+    color: #124559;
+    padding: 1.5rem 1.5rem 0.5rem;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+  
+  .photo-box p {
+    color: #666;
+    padding: 0 1.5rem 1.5rem;
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .photo-box-button {
+    padding: 0 1.5rem 1.5rem;
+    margin-top: auto;
+    text-align: center;
+  }
+  
+  .photo-box-button .btn {
+    display: inline-block;
+    background: #124559;
+    color: #eff6e0;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 80%;
+  }
+  
+  .photo-box-button .btn:hover {
+    background: #598392;
+  }
+  
+  
+  .photo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 10rem;
+    flex-wrap: wrap;
+  }
+  
+  .photo-box {
+    flex: 0 1 400px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .photo-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .section-photo {
+    width: 100%;
+    height: 300px;
+    object-fit:contain;
+  }
+  
+  .photo-box h3 {
+    color: #124559;
+    padding: 1.5rem 1.5rem 0.5rem;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+  
+  .photo-box p {
+    color: #666;
+    padding: 0 1.5rem 1.5rem;
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .photo-container {
+      gap: 1.5rem;
+    }
+    
+    .photo-box {
+      flex: 0 1 100%;
+    }
+  }
+  /* Section Styles */
+  .section {
+    padding: 3rem 0;
+  }
+  .section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #598392; /* Sky blue */
+  }
+  .section p {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #124559; /* Darker blue */
+  }
+  
+  /* Features Section */
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: #eff6e0; /* Light pastel green */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  .card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #124559; /* Darker blue */
+  }
+  .card p {
+    font-size: 1rem;
+    color: #333;
+  }
+  /* Add this to your existing CSS file */
+  .card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #124559;  /* Updated icon color */
+  }
+  /* Benefits Section */
+  .benefits ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+  }
+  .benefits ul li {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    color: #124559;
+  }
+  
+  /* Sign Up Section */
+  .signup form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .signup input {
+    padding: 0.8rem;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #124559;
+    border-radius: 5px;
+  }
+  .signup button {
+    background: #598392;
+    color: #eff6e0;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .signup button:hover {
+    background: #124559;
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background: #01161e;
+    color: #eff6e0;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .footer p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  
+  
+  /* Features Section with Hover Effects */
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: #eff6e0; /* Light pastel green */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth scaling and shadow effect */
+  }
+  .card:hover {
+    transform: scale(1.1); /* Scale up the card on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #124559; /* Darker blue */
+  }
+  .card p {
+    font-size: 1rem;
+    color: #555;
+  }
+  .signin-container {
+    max-width: 400px;
+    margin: 5rem auto;
+    text-align: center;
+    padding: 2rem;
+    background: #eff6e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .signin-container h1 {
+    margin-bottom: 1.5rem;
+    color: #124559;
+  }
+  .signin-container form input {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    width: 100%;
+    border: 1px solid #124559;
+    border-radius: 5px;
+  }
+  .signin-container button {
+    background: #124559;
+    color: #eff6e0;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .signin-container button:hover {
+    background: #598392;
+  }
+  
+  /* General Section Styling */
+  .section {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  .section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #598392;
+  }
+  
+  .section p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  
+  /* Services Section - List Style */
+  #services ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+  }
+  
+  #services ul li {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #124559;
+  }
+  
+  /* Contact Form Styling */
+  #contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  #contact form input,
+  #contact form textarea {
+    padding: 0.8rem;
+    border: 1px solid #124559;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  #contact form button {
+    background: #598392;
+    color: #eff6e0;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #contact form button:hover {
+    
+    background: #124559;
+  }
+  /* Founders Section Styles */
+  .founder-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .card {
+    background: #eff6e0; /* Light pastel green */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card img.founder-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #124559; /* Darker blue */
+  }
+  
+  .card p {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  /* Services Section */
+  
+  /* Services Section */
+  .services {
+    position: relative;
+    background: url('25.mp4') no-repeat center center/cover;
+    padding: 3rem 0;
+    color: #eff6e0;
+  }
+  
+  .services h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #124559;
+  }
+  
+  .services p {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .service-slider {
+    overflow: hidden; /* Hide items outside the container */
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .slider-container {
+    display: flex;
+    animation: slide 8s linear infinite;
+    /Continuousslidinganimation/:;
+    -webkit-animation: slide 8s linear infinite;
+  }
+  
+  .slider-item {
+    flex: 0 0 100%; /* Each item takes full width */
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0 10px;
+  }
+  
+  .slider-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #124559;
+  }
+  
+  .slider-item p {
+    color: #333;
+  }
+  
+  /* Sliding Animation */
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures video covers the entire section */
+    z-index: -1;
+  }
+  
+  
+  
+  /* Navbar styling */
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: var(--primary-dark-blue);
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .navbar ul {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar ul li a {
+    text-decoration: none;
+    color: var(--white);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar ul li a:hover {
+    color: var(--lightBulue);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+  
+    .navbar ul li {
+        margin-bottom: 10px;
+    }
+  
+    .section {
+        font-size: 1.5rem;
+    }
+  }
